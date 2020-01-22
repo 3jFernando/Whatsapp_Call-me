@@ -38,7 +38,7 @@ CREATE TABLE `numbers` (
 
 LOCK TABLES `numbers` WRITE;
 /*!40000 ALTER TABLE `numbers` DISABLE KEYS */;
-INSERT INTO `numbers` VALUES (1,57,'7865','https://wa.me/577865',0),(2,57,'67','https://we.me/67',0),(3,57,'3156705317','https://wa.me/573156705317',0),(4,67,'3234454','https://wa.me/673234454',0),(5,57,'300000000','https://wa.me/57300000000',0),(6,57,'11','https://wa.me/5711',0),(7,1,'1','https://wa.me/11',0),(8,57,'342342','https://wa.me/57342342',0),(9,57,'1','https://wa.me/571',0),(10,45,'1','https://wa.me/451',0),(11,66,'66','https://wa.me/6666',0);
+
 /*!40000 ALTER TABLE `numbers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
