@@ -46,6 +46,7 @@ class Number {
         return $numbersArray;
     }
 
+    // guardar y editar
     public function Form($id, $code, $number, $action)
     {
 
@@ -68,6 +69,93 @@ class Number {
             return false;
         }
 
+    }
+
+    // activar numero
+    public function ActiveNumber($state)
+    {
+
+        $numbersQuery = $this->querySelect(true, null);
+
+        $number = null;
+        $numberActive = false;
+        $numberActiveState = false;
+        while ($row = $numbersQuery->fetch(PDO::FETCH_ASSOC)){
+            if($state) {
+                $numberActiveState = true;
+                $numberActive = true;
+
+                $this->queryUpdate(1);
+                $number = $this->querySelect(false, 1);
+            }
+            if(!$numberActiveState) {
+                if($row['active'] == 1) {
+
+                    $cant = $this->queryCount();
+                    $newItemActive = (int)($row['id'] + 1);
+
+                    $numberActive = true;
+                    $number = $row['link'];
+
+                    $this->queryUpdate(($newItemActive > $cant) ? 1 : $newItemActive);
+                }
+            }
+        }
+
+        return ($numberActive) ? $number : $this->activeOtherNumber(true);
+
+    }
+
+    public function activeOtherNumber($state)
+    {
+        return $this->ActiveNumber($state);
+    }
+
+    public function querySelect($all, $param)
+    {
+        // select all query
+        $query = ($all) ? "SELECT * FROM {$this->table}" : "SELECT * FROM {$this->table} WHERE id = {$param};";
+
+        // prepare query statement
+        $numbersQuery = $this->conn->prepare($query);
+
+        // execute query
+        $numbersQuery->execute();
+
+        return $numbersQuery;
+    }
+
+    public function queryUpdate($param)
+    {
+
+        try {
+            // select all query
+            $queryAll = "UPDATE {$this->table} SET active = 0 WHERE id > 0;";
+            $query = "UPDATE {$this->table} SET active = 1 WHERE id = {$param};";
+
+            // prepare query statement
+            $this->conn->prepare($queryAll)->execute();
+            $this->conn->prepare($query)->execute();
+
+        } catch (\Exception $e) {
+            // select all query
+            $queryAll = "UPDATE {$this->table} SET active = 0 WHERE id > 0;";
+            $query = "UPDATE {$this->table} SET active = 1 WHERE id = 1;";
+
+            // prepare query statement
+            $this->conn->prepare($queryAll)->execute();
+            $this->conn->prepare($query)->execute();
+        }
+
+    }
+
+    public function queryCount()
+    {
+        $queryCount = $this->conn->prepare("SELECT COUNT(*) FROM {$this->table};");
+        $queryCount->execute();
+        $cant = $queryCount->fetchColumn();
+
+        return $cant;
     }
 
 }

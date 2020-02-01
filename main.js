@@ -1,6 +1,6 @@
 'use strict';
 
-const url = "http://localhost/whatsapp-call/src/Server/";
+const url = "http://localhost/Whatsapp_Call-me/src/Server/";
 
 loadNumbers();
 
